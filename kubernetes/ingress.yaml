@@ -50,11 +50,11 @@ spec:
     - destination:
         host: example-service
         subset: release
-      weight: 50
+      weight: 20
     - destination:
         host: example-service
         subset: canary
-      weight: 50
+      weight: 80
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
