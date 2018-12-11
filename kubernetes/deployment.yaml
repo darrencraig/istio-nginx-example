@@ -1,0 +1,106 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: example-service-v1.0.0
+  labels:
+    name: example-service
+    instance: testing
+    track: release
+    version: 1.0.0
+spec:
+  selector:
+    matchLabels:
+      name: example-service
+      instance: testing
+      track: release
+      version: 1.0.0
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        name: example-service
+        instance: testing
+        track: release
+        version: 1.0.0
+    spec:
+      containers:
+      - name: example-service
+        image: YOURIMAGE:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9000
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: example-service-v2.0.0
+  labels:
+    name: example-service
+    instance: testing
+    track: canary
+    version: 2.0.0
+spec:
+  selector:
+    matchLabels:
+      name: example-service
+      instance: testing
+      track: canary
+      version: 2.0.0
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        name: example-service
+        instance: testing
+        track: canary
+        version: 2.0.0
+    spec:
+      containers:
+      - name: example-service
+        image: YOURIMAGE:canary
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9000
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: example-service-nginx
+  labels:
+    name: example-service-nginx
+    instance: testing
+spec:
+  selector:
+    matchLabels:
+      name: example-service-nginx
+      instance: testing
+  template:
+    metadata:
+      labels:
+        name: example-service-nginx
+        instance: testing
+    spec:
+      containers:
+      - name: example-service-nginx
+        image: MYNGINX:latest
+        imagePullPolicy: Always
+        env:
+        - name: LARAVEL_UPSTREAM
+          value: example-service
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /etc/nginx/conf.d
+          name: example-service-nginx
+        resources:
+      volumes:
+      - name: example-service-nginx
+        configMap:
+          name: example-service-nginx
+          items:
+          - key: nginx
+            path: default.conf

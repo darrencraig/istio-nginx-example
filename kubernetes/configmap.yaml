@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: example-service-nginx
+  labels:
+    name: example-service-nginx
+data:
+  nginx: |
+    server {
+        listen 80;
+        root /var/www/public;
+
+        index index.php index.html index.htm;
+
+        location = /favicon.ico { access_log off; log_not_found off; }
+        location = /robots.txt  { access_log off; log_not_found off; }
+
+        location / {
+            try_files $uri $uri/ /index.php$query_string;
+        }
+
+        location ~ \.php$ {
+            # try_files $uri =404;
+            fastcgi_split_path_info ^(.+\.php)(/.+)$;
+            fastcgi_read_timeout 1000;
+            fastcgi_pass example-service:9000;
+            fastcgi_index index.php;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            include fastcgi_params;
+        }
+
+        location ~ /\.ht {
+            deny all;
+        }
+
+    }
