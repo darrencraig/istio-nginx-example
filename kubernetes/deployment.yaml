@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - name: example-service
-        image: YOURIMAGE:latest
+        image: darrencraig/example-php-service:v1
         imagePullPolicy: Always
         ports:
         - containerPort: 9000
@@ -59,7 +59,7 @@ spec:
     spec:
       containers:
       - name: example-service
-        image: YOURIMAGE:canary
+        image: darrencraig/example-php-service:v2
         imagePullPolicy: Always
         ports:
         - containerPort: 9000
@@ -84,7 +84,7 @@ spec:
     spec:
       containers:
       - name: example-service-nginx
-        image: MYNGINX:latest
+        image: darrencraig/laravel-nginx:latest
         imagePullPolicy: Always
         env:
         - name: LARAVEL_UPSTREAM

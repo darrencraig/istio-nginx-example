@@ -40,26 +40,24 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: example-service
-  labels:
-    name: example-service
 spec:
   hosts:
   - example-service
   http:
-  - route:
-    - destination:
-        host: example-service
-        subset: release
-      weight: 20
-    - destination:
-        host: example-service
-        subset: canary
-      weight: 80
+    - route:
+      - destination:
+          host: example-service
+          subset: release
+        weight: 5
+      - destination:
+          host: example-service
+          subset: canary
+        weight: 95
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
-  name: example-service-dr
+  name: example-service
 spec:
   host: example-service
   subsets:
