@@ -43,16 +43,18 @@ metadata:
 spec:
   hosts:
   - example-service
-  http:
-    - route:
-      - destination:
-          host: example-service
-          subset: release
-        weight: 5
-      - destination:
-          host: example-service
-          subset: canary
-        weight: 95
+  tcp:
+  - match:
+    - port: 9000
+    route:
+    - destination:
+        host: example-service
+        subset: release
+      weight: 10
+    - destination:
+        host: example-service
+        subset: canary
+      weight: 90
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule

@@ -7,7 +7,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - name: http
+  - name: http-nginx
     port: 80
   selector:
     name: example-service-nginx
@@ -21,6 +21,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: 9000
+    - protocol: TCP
+      port: 9000
   selector:
     name: example-service
